@@ -99,14 +99,15 @@ void draw() {
         update(mouseX, mouseY);
         rect1.display();
 
+        textSize(12);
+        fill(255);
+        text("わんもあ", width/2, height-15);
+
         noFill();
         stroke(lineColor);
         strokeWeight(5);
         rect(margin, margin, height-margin*2, height/2+margin);
 
-
-        
-    
         fill(255);
         textSize(16);
         text(outputWord[0], width/2, 100);
@@ -136,7 +137,6 @@ void update(int x, int y)
     if(mousePressed) {
         if(rect1.pressed()) {
             randomSelect();
-            println("press!!!");
         }
     }
 }
