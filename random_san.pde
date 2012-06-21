@@ -11,24 +11,44 @@ import java.io.File;
 import java.io.IOException;
 
 DropTarget dropTarget;
+
 String[] outputWord = new String[2];
+String lines[];
+
 boolean inputFlag = false;
+
+color lineColor = #5D6562;
+color baseColor = #5D6562;
+color highlightColor = #E69917;
+final int margin = 30;
+
+boolean locked = false;
+RectButton rect1;
 
 void setup(){
 
     size(300, 300);
     smooth();
-    PFont myFont = loadFont("HiraMaruPro-W4-48.vlw");
+    //PFont myFont = loadFont("HiraMaruPro-W4-48.vlw");
+    PFont myFont = loadFont("Migu-1C-Regular-48.vlw");
     textFont(myFont, 32);
+
+    rect1 = new RectButton(width/2-35, height-margin, 70, 20,baseColor, highlightColor);
+
+
 
     // ==================================================
     // ファイルのドラッグ&ドロップをサポートするコード
     // ==================================================
     dropTarget = new DropTarget(this, new DropTargetListener() {
             public void dragEnter(DropTargetDragEvent dtde) {}
-            public void dragOver(DropTargetDragEvent dtde) {}
+            public void dragOver(DropTargetDragEvent dtde) {
+                lineColor = highlightColor;
+            }
             public void dropActionChanged(DropTargetDragEvent dtde) {}
-            public void dragExit(DropTargetEvent dte) {}
+            public void dragExit(DropTargetEvent dte) {
+                lineColor = baseColor;
+            }
             
             public void drop(DropTargetDropEvent dtde) {
                 dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
@@ -47,22 +67,10 @@ void setup(){
                 if(fileNameList == null) return;
 
                 for(File f : fileNameList){
-                    String lines[] = loadStrings(f);
-
-                    int index = int(random(lines.length));
-                    outputWord[0] = lines[index];
-
-                    index = int(random(lines.length));
-                    outputWord[1] = lines[index];
-
-
+                    lines = loadStrings(f);
+                    randomSelect();
                     inputFlag = true;
-
-                    /*
-                    for (int i=0; i < lines.length; i++) {
-                        println(lines[i]);
-                    }
-                    */
+                    lineColor = baseColor;
                 }
             }
         });
@@ -70,18 +78,65 @@ void setup(){
 
 }
 
+void randomSelect() {
+    int index = int(random(lines.length));
+    outputWord[0] = lines[index];
+
+    int buf;
+    while((buf = int(random(lines.length))) == index){}
+    index = buf;
+    outputWord[1] = lines[index];
+}
+
 void draw() {
-    background(255);
-    fill(0);
+    background(#212222);
+    
+    fill(255);
     textAlign(CENTER);
 
     if(inputFlag){
-        text(outputWord[0], width/2, 50);
-        text(outputWord[1], width/2, 100);
+        strokeWeight(1);
+        update(mouseX, mouseY);
+        rect1.display();
+
+        noFill();
+        stroke(lineColor);
+        strokeWeight(5);
+        rect(margin, margin, height-margin*2, height/2+margin);
+
+
+        
+    
+        fill(255);
+        textSize(16);
+        text(outputWord[0], width/2, 100);
+        text(outputWord[1], width/2, 150);
     }
     else{
+        noFill();
+        stroke(lineColor);
+        strokeWeight(1);
+        rect(margin, margin, height-margin*2, height-margin*2);
+        
         textSize(16);
-        text("ファイルをD＆D！", width/2, height/2);
+        text("ファイルをD＆D！", width/2, height/2+textDescent());
     }
     /* 省略 */
+}
+
+void update(int x, int y)
+{
+    if(locked == false) {
+        rect1.update();
+    } 
+    else {
+        locked = false;
+    }
+
+    if(mousePressed) {
+        if(rect1.pressed()) {
+            randomSelect();
+            println("press!!!");
+        }
+    }
 }
