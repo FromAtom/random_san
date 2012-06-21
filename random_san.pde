@@ -29,12 +29,15 @@ void setup(){
 
     size(300, 300);
     smooth();
+
+    //--Fonr for Mac-----------------------------------
     //PFont myFont = loadFont("HiraMaruPro-W4-48.vlw");
+    
+    //--Fonr for Win-----------------------------------
     PFont myFont = loadFont("Migu-1C-Regular-48.vlw");
     textFont(myFont, 32);
 
     rect1 = new RectButton(width/2-35, height-margin, 70, 20,baseColor, highlightColor);
-
 
 
     // ==================================================
@@ -122,7 +125,6 @@ void draw() {
         textSize(16);
         text("ファイルをD＆D！", width/2, height/2+textDescent());
     }
-    /* 省略 */
 }
 
 void update(int x, int y)
