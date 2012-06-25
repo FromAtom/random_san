@@ -31,14 +31,24 @@ void setup(){
     smooth();
 
     //--Fonr for Mac-----------------------------------
-    //PFont myFont = loadFont("HiraMaruPro-W4-48.vlw");
+    PFont myFont = loadFont("HiraMaruPro-W4-48.vlw");
     
     //--Fonr for Win-----------------------------------
-    PFont myFont = loadFont("Migu-1C-Regular-48.vlw");
+    //PFont myFont = loadFont("Migu-1C-Regular-48.vlw");
     textFont(myFont, 32);
 
     rect1 = new RectButton(width/2-35, height-margin, 70, 20,baseColor, highlightColor);
 
+    File f = new File("./default.txt");
+    
+    if(f.canRead()){
+        lines = loadStrings(f);
+        randomSelect();
+        inputFlag = true;
+        lineColor = baseColor;
+    }
+    else
+        println("ng");
 
     // ==================================================
     // ファイルのドラッグ&ドロップをサポートするコード
